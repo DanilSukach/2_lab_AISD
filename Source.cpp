@@ -496,10 +496,70 @@ public:
 		}
 		return result;
 	}
-	void formula_Kardano() const {
-		cout << "Нет действительных корней" << endl;
+	void formula_Kardano(T& x1, T& x2, T& x3, double& Q, bool& flag) const {
+		list* tmp = _head;
+		complex<T> d = tmp->data;
+		T dr = real(d);
+		T di = imag(d);
+		tmp = tmp->link;
+		if (!tmp)throw"invalid Polinomial";
+		complex<T> c = tmp->data;
+		T cr = real(c);
+		T ci = imag(c);
+		tmp = tmp->link;
+		if (!tmp)throw"invalid Polinomial";
+		complex<T> b = tmp->data;
+		T br = real(b);
+		T bi = imag(b);
+		tmp = tmp->link;
+		if (!tmp)throw"invalid Polinomial";
+		complex<T> a = tmp->data;
+		T ar = real(a);
+		T ai = imag(a);
+		tmp = tmp->link;
+		if (tmp)throw"invalid Polinomial";
+		if ((ai == 0) & (bi == 0) & (ci == 0) & (di == 0)) {
+			flag = true;
+			double p = (3 * static_cast<double>(ar) * static_cast<double>(cr) - pow(br, 2)) / (3 * pow(ar, 2));
+			double q = (2 * pow(br, 3) - 9 * static_cast<double>(ar) * static_cast<double>(br) * static_cast<double>(cr) + 27 * pow(ar, 2) * dr) / (27 * pow(ar, 3));
+			Q = pow((p / 3), 3) + pow((q / 2), 2);
+			cout << "Q = " << Q << endl;
+			double u = cbrt((-q / 2) + sqrt((pow(q, 2) / 4) + (pow(p, 3) / 27)));
+			double v = cbrt((-q / 2) - sqrt((pow(q, 2) / 4) + (pow(p, 3) / 27)));
+			if (Q > 0) {
+				double y = u + v;
+				
+				x1 = static_cast<T>(y - (br / (3 * ar)));
+			}
+			if (abs(Q) == 0) {
+				double y1 = 2 * cbrt(-q / 2);
+				double y2 = -cbrt(-q / 2);
+				x1 =static_cast<T>( y1 - (br / (3 * ar)));
+				x2 =x3 = static_cast<T>(y2 - (br / (3 * ar)));
+			}
+			if (Q < 0) {
+				double fi = 0;
+				if (abs(q) < 0.1) {
+					fi = 3.1415926535 / 2;
+				}
+				if (q > 0) {
+					fi = atan(sqrt(-Q) / (-q / 2)) + 3.1415926535;
+				}
+				if (q < 0) {
+					fi = atan(sqrt(-Q) / (-q / 2));
+				}
+				x1 = static_cast<T>((2 * sqrt(-p / 3) * cos(fi / 3)) - (br / (3 * ar)));
+				x2 = static_cast<T>((2 * sqrt(-p / 3) * cos((fi + 2 * 3.1415926535) / 3)) - (br / (3 * ar)));
+				x3 = static_cast<T>((2 * sqrt(-p / 3) * cos((fi + 4 * 3.1415926535) / 3)) - (br / (3 * ar)));
+			}
+		}
+		else {
+			flag = false;
+		}
+
 	}
 };
+
 
 
 void menu_1() {
@@ -1551,13 +1611,37 @@ int main() {
 					cout << p1 << " = 0" << endl;
 					cout << p2 << " = 0" << endl;
 					try {
-						p1.formula_Kardano();
+						float x1, x2, x3;
+						double Q;
+						bool flag;
+						p1.formula_Kardano(x1, x2, x3, Q, flag);
+						cout << "Первое уравнение:" << endl;
+						if (flag) {
+							cout << "x1 = " << x1 << endl;
+							cout << "x2 = " << x2 << endl;
+							cout << "x3 = " << x3 << endl;
+						}
+						else {
+							cout << "Действительных корней нет" << endl;
+						}
 					}
 					catch (const char* msg) {
 						cout << msg << endl;
 					}
 					try {
-						p2.formula_Kardano();
+						float x1, x2, x3;
+						double Q;
+						bool flag;
+						p2.formula_Kardano(x1, x2, x3, Q, flag);
+						cout << "Второе уравнение:" << endl;
+						if (flag) {
+							cout << "x1 = " << x1 << endl;
+							cout << "x2 = " << x2 << endl;
+							cout << "x3 = " << x3 << endl;
+						}
+						else {
+							cout << "Действительных корней нет" << endl;
+						}
 					}
 					catch (const char* msg) {
 						cout << msg << endl;
@@ -1815,13 +1899,35 @@ int main() {
 					cout << p1 << " = 0" << endl;
 					cout << p2 << " = 0" << endl;
 					try {
-						p1.formula_Kardano();
+						double x1, x2, x3, Q;
+						bool flag;
+						p1.formula_Kardano(x1, x2, x3, Q, flag);
+						cout << "Первое уравнение:" << endl;
+						if (flag) {
+							cout << "x1 = " << x1 << endl;
+							cout << "x2 = " << x2 << endl;
+							cout << "x3 = " << x3 << endl;
+						}
+						else {
+							cout << "Действительных корней нет" << endl;
+						}
 					}
 					catch (const char* msg) {
 						cout << msg << endl;
 					}
 					try {
-						p2.formula_Kardano();
+						double x1, x2, x3, Q;
+						bool flag;
+						cout << "Второе уравнение:" << endl;
+						p2.formula_Kardano(x1, x2, x3, Q, flag);
+						if (flag) {
+							cout << "x1 = " << x1 << endl;
+							cout << "x2 = " << x2 << endl;
+							cout << "x3 = " << x3 << endl;
+						}
+						else {
+							cout << "Действительных корней нет" << endl;
+						}
 					}
 					catch (const char* msg) {
 						cout << msg << endl;
